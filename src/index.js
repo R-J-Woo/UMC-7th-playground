@@ -2,6 +2,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
 import { handleUserSignUp } from "./controllers/user.controller.js";
+import { AddStoreController, AddReviewController, AddMissionToStoreController, AddMissionToChallengesController } from "./controllers/store.controller.js";
 
 dotenv.config();
 
@@ -19,6 +20,18 @@ app.get("/", (req, res) => {
 
 // 회원 가입
 app.post("/users/signup", handleUserSignUp);
+
+// 특정 지역에 가게 추가하는 API
+app.post("/regions/:region_id/stores", AddStoreController);
+
+// 가게에 리뷰 추가하는 API
+app.post("/stores/:store_id/reviews", AddReviewController);
+
+// 가게에 미션 추가하는 API
+app.post("/stores/:store_id/missions", AddMissionToStoreController);
+
+// 가게의 미션을 도전 중인 미션에 추가하는 (미션 도전하기) API
+app.post("/missions/:mission_id/challenges", AddMissionToChallengesController)
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

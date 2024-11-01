@@ -3,7 +3,7 @@ import {
   addUser,
   getUser,
   getUserPreferencesByUserId,
-  setPreference,
+  setPreference
 } from "../repositories/user.repository.js";
 
 export const userSignUp = async (data) => {
