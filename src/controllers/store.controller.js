@@ -1,6 +1,8 @@
 import { StatusCodes } from "http-status-codes";
 import { bodyToStore, bodyToReview, bodyToMissionToStore, bodyToMissionToChallenge } from "../dtos/store.dto.js";
-import { addStoreService, addReviewService, addMissionToStoreService, addMissionToChallengeService } from "../services/store.service.js";
+import { addStoreService, addReviewService, addMissionToStoreService, addMissionToChallengeService,
+  getReviewListService
+ } from "../services/store.service.js";
 
 
 // 특정 지역에 가게 추가
@@ -9,6 +11,14 @@ export const AddStoreController = async (req, res, next) => {
   
     const store = await addStoreService(bodyToStore(region_id, req.body));
     res.status(StatusCodes.OK).json({result: store});
+}
+
+// 가게 리뷰 조회
+export const getReviewListController = async (req, res, next) => {
+    const reviews = await getReviewListService(
+      parseInt(req.params.store_id),
+      typeof req.query.cursor === "string" ? parseInt(req.query.cursor) : 0);
+    res.status(StatusCodes.OK).json(reviews);
 }
   
 // 가게에 리뷰 추가

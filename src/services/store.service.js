@@ -3,7 +3,7 @@ import {
   addStoreModel,
   getStoreModel,
   addReviewModel,
-  getReviewModel,
+  getReviewListModel,
   addMissionToStoreModel,
   getMissionToStoreModel,
   addMissionToChallengeModel,
@@ -22,6 +22,11 @@ export const addStoreService = async(data) => {
   const store = await getStoreModel(addStoreId);
 
   return responseFromStore(store);
+}
+
+export const getReviewListService = async (storeId, cursor) => {
+  const reviews = await getReviewListModel(storeId, cursor);
+  return responseFromReview(reviews)
 }
 
 export const addReviewService = async(data) => {

@@ -23,9 +23,12 @@
     }
   }
   
-  export const responseFromReview = (data) => {
+  export const responseFromReview = (reviews) => {
     return {
-      review: data
+      data: reviews,
+      pagination: {
+        cursor: reviews.length ? reviews[reviews.length - 1].id : null,
+      }
     }
   }
 
