@@ -13,9 +13,14 @@ export const bodyToUser = (body) => {
   };
 };
 
-export const responseFromUser = (data) => {
+export const responseFromUser = ({ user, preferences }) => {
+  const preferFoods = preferences.map(
+    (preference) => preference.foodCategory.name
+  );
+
   return {
-    user: data.user,
-    preferences: data.preferences
-  }
-}
+    email: user.email,
+    name: user.name,
+    preferCategory: preferFoods,
+  };
+};

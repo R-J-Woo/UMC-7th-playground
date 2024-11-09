@@ -1,4 +1,4 @@
-import { pool } from "../db.config.js";
+import { pool, prisma } from "../db.config.js";
 
 // 특정 지역에 가게 추가
 export const addStoreModel = async(data) => {
@@ -41,6 +41,23 @@ export const getStoreModel = async (storeId) => {
   }
 };
 
+// 가게 리뷰 가져오기
+export const getReviewListModel = async (storeId, cursor) => {
+  const reviews = await prisma.review.findMany({
+    select: {
+      id: true,
+      body: true,
+      store: true,
+      user: true
+    },
+    where: {storeId: storeId, id: {gt: cursor}},
+    orderBy: {id: "asc"},
+    take: 5
+  });
+
+  return reviews;
+}
+
 // 리뷰 추가하기
 export const addReviewModel = async(data) => {
   const conn = await pool.getConnection();
@@ -60,27 +77,6 @@ export const addReviewModel = async(data) => {
     )
   }
 }
-
-// 리뷰 정보 얻기
-export const getReviewModel = async (reviewId) => {
-  const conn = await pool.getConnection();
-
-  try {
-    const [review] = await pool.query(`SELECT * FROM review WHERE id = ?;`, reviewId);
-
-    if (review.length == 0) {
-      return null;
-    }
-
-    return review;
-  } catch (err) {
-    throw new Error(
-      `오류가 발생했어요. 요청 파라미터를 확인해주세요. (${err})`
-    );
-  } finally {
-    conn.release();
-  }
-};
 
 // 가게에 미션 추가하기
 export const addMissionToStoreModel = async (data) => {
