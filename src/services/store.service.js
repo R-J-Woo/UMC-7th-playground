@@ -3,6 +3,7 @@ import {
   addStoreModel,
   getStoreModel,
   addReviewModel,
+  getReviewModel,
   getReviewListModel,
   addMissionToStoreModel,
   getMissionToStoreModel,
