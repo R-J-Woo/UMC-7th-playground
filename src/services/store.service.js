@@ -1,14 +1,20 @@
-import { responseFromStore, responseFromReview, responseFromMissionToStore, responseFromMissionToChallenge } from "../dtos/store.dto.js";
+import { responseFromStore, responseFromReview, responseFromMissionToStore, responseFromMissionToChallenge,
+  responseFromChallenges, responseFromCompleteChallenge, responseFromStoreMissionList
+ } from "../dtos/store.dto.js";
 import {
   addStoreModel,
   getStoreModel,
   addReviewModel,
   getReviewModel,
   getReviewListModel,
+  getMyReviewListModel,
   addMissionToStoreModel,
   getMissionToStoreModel,
   addMissionToChallengeModel,
-  getMissionToChallengeModel
+  getMissionToChallengeModel,
+  getMyChallengesModel,
+  updateChallengeToCompleteModel,
+  getStoreMissionListModel
 } from "../repositories/store.repository.js";
 
 
@@ -27,7 +33,7 @@ export const addStoreService = async(data) => {
 
 export const getReviewListService = async (storeId, cursor) => {
   const reviews = await getReviewListModel(storeId, cursor);
-  return responseFromReview(reviews)
+  return responseFromReview(reviews);
 }
 
 export const addReviewService = async(data) => {
@@ -68,4 +74,24 @@ export const addMissionToChallengeService = async (data) => {
 
     const challenge = await getMissionToChallengeModel(addMissionToChallengeId);
     return responseFromMissionToChallenge(challenge);
+}
+
+export const getMyReviewListService = async (storeId, userId, cursor) => {
+  const myReviews = await getMyReviewListModel(storeId, userId, cursor);
+  return responseFromReview(myReviews);
+}
+
+export const getStoreMissionListService = async (storeId, cursor) => {
+  const storeMissionList = await getStoreMissionListModel(storeId, cursor);
+  return responseFromStoreMissionList(storeMissionList);
+}
+
+export const getMyChallengesService = async (userId, cursor) => {
+  const myChallenges = await getMyChallengesModel(userId, cursor);
+  return responseFromChallenges(myChallenges);
+}
+
+export const updateChallengeToCompleteService = async (userMissionId) => {
+  const completeChallenge = await updateChallengeToCompleteModel(userMissionId);
+  return responseFromCompleteChallenge(completeChallenge);
 }

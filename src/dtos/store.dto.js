@@ -60,3 +60,28 @@
         challenge: data
     }
   }
+
+  export const responseFromStoreMissionList = (storeMissionList) => {
+    return {
+      data: storeMissionList,
+      pagination: {
+        cursor: storeMissionList.length ? storeMissionList[storeMissionList.length - 1].id : null,
+      }
+    }
+
+  }
+
+  export const responseFromChallenges = (myChallenges) => {
+    return {
+      data: myChallenges,
+      pagination: {
+        cursor: myChallenges.length ? myChallenges[myChallenges.length - 1].id : null,
+      }
+    }
+  }
+
+  export const responseFromCompleteChallenge = (completeChallenge) => {
+    return {
+      data: completeChallenge
+    }
+  }
