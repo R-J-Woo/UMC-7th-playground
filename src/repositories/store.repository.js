@@ -1,4 +1,4 @@
-import { pool, prisma } from "../db.config.js";
+import { prisma } from "../db.config.js";
 
 // 특정 지역에 가게 추가
 export const addStoreModel = async(data) => {
@@ -36,7 +36,7 @@ export const getReviewListModel = async (storeId, cursor) => {
     select: {
       id: true,
       body: true,
-      store: true,
+      score: true,
       user: true
     },
     where: {storeId: storeId, id: {gt: cursor}},
@@ -133,4 +133,65 @@ export const getMissionToChallengeModel = async (challengeId) => {
   });
 
   return challenge;
+}
+
+// 내가 작성한 리뷰 리스트 가져오기
+export const getMyReviewListModel = async (storeId, userId, cursor) => {
+  const myReviews = await prisma.review.findMany({
+    select: {
+      id: true,
+      body: true,
+      score: true,
+      user: true
+    },
+    where: {storeId: storeId, userId: userId, id: {gt: cursor}},
+    orderBy: {id: "asc"},
+    take: 5
+  });
+
+  return myReviews;
+}
+
+// 특정 가게의 미션 목록 가져오기
+export const getStoreMissionListModel = async (storeId, cursor) => {
+  const storeMissionList = await prisma.mission.findMany({
+    select: {
+      id: true,
+      store: true,
+      reward: true,
+      deadline: true,
+      missionSpec: true
+    },
+    where: {storeId: storeId, id: {gt: cursor}},
+    orderBy: {id: "asc"},
+    take: 5
+  })
+
+  return storeMissionList;
+}
+
+// 내가 진행 중인 미션 목록 가져오기
+export const getMyChallengesModel = async (userId, cursor) => {
+  const myChallenges = await prisma.userMission.findMany({
+    select: {
+      id: true,
+      mission: true
+    },
+    where: {userId: userId, id: {gt: cursor}},
+    orderBy: {id: "asc"},
+    take: 5
+  })
+
+  return myChallenges;
+}
+
+// 내가 진행 중인 미션을 진행 완료로 바꾸기
+export const updateChallengeToCompleteModel = async (userMissionId) => {
+  const completeChallenge = await prisma.userMission.update({
+    select: {id: true, user: true, mission: true, status: true},
+    where: { id: userMissionId },
+    data: { status: "진행 완료" }
+  })
+
+  return completeChallenge;
 }

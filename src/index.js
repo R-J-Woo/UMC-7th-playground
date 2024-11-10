@@ -3,7 +3,8 @@ import dotenv from "dotenv";
 import express from "express";
 import { handleUserSignUp } from "./controllers/user.controller.js";
 import { AddStoreController, AddReviewController, AddMissionToStoreController, AddMissionToChallengesController,
-  getReviewListController
+  getReviewListController, getMyReviewListController, getMyChallengesContoller, updateChallengeToCompleteContoller,
+  getStoreMissionListController
  } from "./controllers/store.controller.js";
 
 dotenv.config();
@@ -37,6 +38,18 @@ app.post("/stores/:store_id/missions", AddMissionToStoreController);
 
 // 가게의 미션을 도전 중인 미션에 추가하는 (미션 도전하기) API
 app.post("/missions/:mission_id/challenges", AddMissionToChallengesController)
+
+// 내가 작성한 리뷰 목록
+app.get("/stores/:store_id/reviews/my", getMyReviewListController)
+
+// 특정 가게의 미션 목록
+app.get("/stores/:store_id/missions", getStoreMissionListController)
+
+// 내가 진행 중인 미션 목록
+app.get("/missions/challenges", getMyChallengesContoller)
+
+// 내가 진행 중인 미션을 진행 완료로 바꾸기
+app.post("/missions/challenges/:user_mission_id/complete", updateChallengeToCompleteContoller);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

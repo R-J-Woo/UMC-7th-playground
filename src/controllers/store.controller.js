@@ -1,7 +1,8 @@
 import { StatusCodes } from "http-status-codes";
 import { bodyToStore, bodyToReview, bodyToMissionToStore, bodyToMissionToChallenge } from "../dtos/store.dto.js";
 import { addStoreService, addReviewService, addMissionToStoreService, addMissionToChallengeService,
-  getReviewListService
+  getReviewListService, getMyReviewListService, getMyChallengesService, updateChallengeToCompleteService,
+  getStoreMissionListService
  } from "../services/store.service.js";
 
 
@@ -45,4 +46,42 @@ export const AddMissionToChallengesController = async (req, res, next) => {
   const challenge = await addMissionToChallengeService(bodyToMissionToChallenge(mission_id, req.body));
   res.status(StatusCodes.OK).json({result: challenge});
 
+}
+
+// 내가 작성한 리뷰 목록 가져오기
+export const getMyReviewListController = async (req, res, next) => {
+
+  const myReviews = await getMyReviewListService(
+    parseInt(req.params.store_id),
+    parseInt(req.body.user_id),
+    typeof req.query.cursor === "string" ? parseInt(req.query.cursor) : 0);
+
+  res.status(StatusCodes.OK).json(myReviews);
+}
+
+// 특정 가게의 미션 목록 가져오기
+export const getStoreMissionListController = async (req, res, next) => {
+  const storeMissionList = await getStoreMissionListService(
+    parseInt(req.params.store_id),
+    typeof req.query.cursor === "string" ? parseInt(req.query.cursor) : 0
+  )
+
+  res.status(StatusCodes.OK).json(storeMissionList);
+}
+
+// 내가 진행 중인 미션 목록 가져오기
+export const getMyChallengesContoller = async (req, res, next) => {
+  const myChallenges = await getMyChallengesService(
+    parseInt(req.body.user_id),
+    typeof req.query.cursor === "string" ? parseInt(req.query.cursor) : 0);
+
+  res.status(StatusCodes.OK).json(myChallenges);
+}
+
+// 내가 진행 중인 미션 목록을 진행 완료로 바꾸기
+export const updateChallengeToCompleteContoller = async (req, res, next) => {
+  const userMissionId = parseInt(req.params.user_mission_id);
+  const completeChallenge = await updateChallengeToCompleteService(userMissionId);
+
+  res.status(StatusCodes.OK).json(completeChallenge);
 }
