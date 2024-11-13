@@ -1,6 +1,7 @@
 import { responseFromStore, responseFromReview, responseFromMissionToStore, responseFromMissionToChallenge,
   responseFromChallenges, responseFromCompleteChallenge, responseFromStoreMissionList
  } from "../dtos/store.dto.js";
+import { AlreadyChallengingMission } from "../error.js";
 import {
   addStoreModel,
   getStoreModel,
@@ -69,7 +70,7 @@ export const addMissionToChallengeService = async (data) => {
     })
     
     if (addMissionToChallengeId === null) {
-        throw new Error("이미 도전 중인 미션입니다.");
+        throw new AlreadyChallengingMission("이미 도전 중인 미션입니다.", data);
     }
 
     const challenge = await getMissionToChallengeModel(addMissionToChallengeId);

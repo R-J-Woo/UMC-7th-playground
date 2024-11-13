@@ -109,7 +109,13 @@ export const getMissionToStoreModel = async (missionId) => {
 
 // 도전 중인 미션 추가
 export const addMissionToChallengeModel = async (data) => {
-  const challenge = await prisma.userMission.create({
+  const challenge = await prisma.userMission.findFirst({where: {userId: parseInt(data.user_id), missionId: parseInt(data.mission_id)}});
+
+  if (challenge) {
+    return null;
+  }
+
+  const created = await prisma.userMission.create({
     data: {
       missionId: parseInt(data.mission_id),
       userId: parseInt(data.user_id),

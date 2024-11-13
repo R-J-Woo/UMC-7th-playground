@@ -11,7 +11,7 @@ export const AddStoreController = async (req, res, next) => {
     const region_id = req.params.region_id;
   
     const store = await addStoreService(bodyToStore(region_id, req.body));
-    res.status(StatusCodes.OK).json({result: store});
+    res.status(StatusCodes.OK).success({result: store});
 }
 
 // 가게 리뷰 조회
@@ -19,7 +19,7 @@ export const getReviewListController = async (req, res, next) => {
     const reviews = await getReviewListService(
       parseInt(req.params.store_id),
       typeof req.query.cursor === "string" ? parseInt(req.query.cursor) : 0);
-    res.status(StatusCodes.OK).json(reviews);
+    res.status(StatusCodes.OK).success({result: reviews});
 }
   
 // 가게에 리뷰 추가
@@ -27,7 +27,7 @@ export const AddReviewController = async (req, res, next) => {
   const store_id = req.params.store_id;
 
   const review = await addReviewService(bodyToReview(store_id, req.body));
-  res.status(StatusCodes.OK).json({result: review});
+  res.status(StatusCodes.OK).success({result: review});
 }
 
 // 가게에 미션 추가
@@ -35,7 +35,7 @@ export const AddMissionToStoreController = async (req, res, next) => {
   const store_id = req.params.store_id;
 
   const mission = await addMissionToStoreService(bodyToMissionToStore(store_id, req.body));
-  res.status(StatusCodes.OK).json({result: mission});
+  res.status(StatusCodes.OK).success({result: mission});
   
 }
 
@@ -44,7 +44,7 @@ export const AddMissionToChallengesController = async (req, res, next) => {
   const mission_id = req.params.mission_id;
 
   const challenge = await addMissionToChallengeService(bodyToMissionToChallenge(mission_id, req.body));
-  res.status(StatusCodes.OK).json({result: challenge});
+  res.status(StatusCodes.OK).success({result: challenge});
 
 }
 
@@ -56,7 +56,7 @@ export const getMyReviewListController = async (req, res, next) => {
     parseInt(req.body.user_id),
     typeof req.query.cursor === "string" ? parseInt(req.query.cursor) : 0);
 
-  res.status(StatusCodes.OK).json(myReviews);
+  res.status(StatusCodes.OK).success({result: myReviews});
 }
 
 // 특정 가게의 미션 목록 가져오기
@@ -66,7 +66,7 @@ export const getStoreMissionListController = async (req, res, next) => {
     typeof req.query.cursor === "string" ? parseInt(req.query.cursor) : 0
   )
 
-  res.status(StatusCodes.OK).json(storeMissionList);
+  res.status(StatusCodes.OK).success({result: storeMissionList});
 }
 
 // 내가 진행 중인 미션 목록 가져오기
@@ -75,7 +75,7 @@ export const getMyChallengesContoller = async (req, res, next) => {
     parseInt(req.body.user_id),
     typeof req.query.cursor === "string" ? parseInt(req.query.cursor) : 0);
 
-  res.status(StatusCodes.OK).json(myChallenges);
+  res.status(StatusCodes.OK).success({result: myChallenges});
 }
 
 // 내가 진행 중인 미션 목록을 진행 완료로 바꾸기
@@ -83,5 +83,5 @@ export const updateChallengeToCompleteContoller = async (req, res, next) => {
   const userMissionId = parseInt(req.params.user_mission_id);
   const completeChallenge = await updateChallengeToCompleteService(userMissionId);
 
-  res.status(StatusCodes.OK).json(completeChallenge);
+  res.status(StatusCodes.OK).success({result: completeChallenge});
 }
